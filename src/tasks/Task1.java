@@ -4,9 +4,7 @@ import common.Person;
 import common.PersonService;
 import common.Task;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /*
@@ -21,7 +19,24 @@ public class Task1 implements Task {
   // !!! Редактируйте этот метод !!!
   private List<Person> findOrderedPersons(List<Integer> personIds) {
     Set<Person> persons = PersonService.findPersons(personIds);
-    return Collections.emptyList();
+
+    // Создаём LinkedHashMap idsPersons (id - person).
+    Map<Integer, Person> idsPersons = new LinkedHashMap<>();
+
+    // Заполняем idsPersons ключами (id) из personIds. Порядок элементов в idsPersons и personIds будет одинаковый.
+    // Асимпотика: forEach - O(n); idsPersons.put - O(1); общая - O(n) * O(1) = O(n).
+    personIds.forEach(e -> idsPersons.put(e, null));
+
+    // Каждый елемент из persons добавляем в idsPersons.
+    // Т.к. при добавлении в LinkedHashMap элемента с уже существующим ключом, порядок элементов не меняется,
+    // то в idsPersons останется нужный нам порядок элементов.
+    // Асимпотика: forEach - O(n); idsPersons.put - O(1); общая - O(n) * O(1) = O(n).
+    persons.forEach(e -> idsPersons.put(e.getId(), e));
+
+    // Общая асимпотика: O(n) * O(1) + O(n) * O(1) = O(n)
+
+    // Возвращаем ArrayList из значений values мапы idsPersons.
+    return new ArrayList<>(idsPersons.values());
   }
 
   @Override
