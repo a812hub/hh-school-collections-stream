@@ -41,12 +41,12 @@ public class Task8 implements Task {
   // словарь id персоны -> ее имя
   public Map<Integer, String> getPersonNames(Collection<Person> persons) {
     return persons.stream()
-            .collect(Collectors.toMap(Person::getId, p -> convertPersonToString(p)));
+            .collect(Collectors.toMap(Person::getId, this::convertPersonToString, (person1, person2) -> person1));
   }
 
   // есть ли совпадающие в двух коллекциях персоны?
   public boolean hasSamePersons(Collection<Person> persons1, Collection<Person> persons2) {
-    return !Collections.disjoint(persons1, persons2);
+    return !Collections.disjoint(new HashSet<>(persons1), new HashSet<>(persons2));
   }
 
   //...
@@ -57,8 +57,8 @@ public class Task8 implements Task {
   @Override
   public boolean check() {
     System.out.println("Слабо дойти до сюда и исправить Fail этой таски?");
-    boolean codeSmellsGood = true;  // I hope so :)
-    boolean reviewerDrunk = false;  // But, now it doesn't matter.. xD
+    boolean codeSmellsGood = true;
+    boolean reviewerDrunk = false;
     return codeSmellsGood || reviewerDrunk;
   }
 }
