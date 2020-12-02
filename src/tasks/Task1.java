@@ -20,23 +20,12 @@ public class Task1 implements Task {
   private List<Person> findOrderedPersons(List<Integer> personIds) {
     Set<Person> persons = PersonService.findPersons(personIds);
 
-    // Создаём LinkedHashMap idsPersons (id - person).
-    Map<Integer, Person> idsPersons = new LinkedHashMap<>();
+    Map<Integer, Person> idsPersons = persons.stream()
+            .collect(Collectors.toMap(Person::getId, person -> person));
 
-    // Заполняем idsPersons ключами (id) из personIds. Порядок элементов в idsPersons и personIds будет одинаковый.
-    // Асимпотика: forEach - O(n); idsPersons.put - O(1); общая - O(n) * O(1) = O(n).
-    personIds.forEach(e -> idsPersons.put(e, null));
-
-    // Каждый елемент из persons добавляем в idsPersons.
-    // Т.к. при добавлении в LinkedHashMap элемента с уже существующим ключом, порядок элементов не меняется,
-    // то в idsPersons останется нужный нам порядок элементов.
-    // Асимпотика: forEach - O(n); idsPersons.put - O(1); общая - O(n) * O(1) = O(n).
-    persons.forEach(e -> idsPersons.put(e.getId(), e));
-
-    // Общая асимпотика: O(n) * O(1) + O(n) * O(1) = O(n)
-
-    // Возвращаем ArrayList из значений values мапы idsPersons.
-    return new ArrayList<>(idsPersons.values());
+    return personIds.stream()
+            .map(idsPersons::get)
+            .collect(Collectors.toList());
   }
 
   @Override
