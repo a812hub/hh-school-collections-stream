@@ -21,10 +21,8 @@ public class Task4 implements Task {
   // !!! Редактируйте этот метод !!!
   private List<ApiPersonDto> convert(List<Person> persons) {
     return persons.stream()                   // создание стрима из коллекции
-            .map(person -> convert(person))   // выдов конвертера для каждого элемента - на выходе Stream<ApiPersonDto>
+            .map(Task4::convert)              // выдов конвертера для каждого элемента - на выходе Stream<ApiPersonDto>
             .collect(Collectors.toList());    // преобразование в List<ApiPersonDto>
-
-    // .map(Task4::convert) - так idea предлагает написать 24-ю строку, но, мне кажется, это было бы менее читаемо в данном случае :)
   }
 
   private static ApiPersonDto convert(Person person) {
